@@ -1,0 +1,5 @@
+.*.sw[op]
+*.o
+*.dep
+gmon.out
+test/test_shell_word_split
