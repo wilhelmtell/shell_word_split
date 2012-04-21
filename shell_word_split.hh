@@ -31,7 +31,7 @@ inline char const * parse_escape(char const * p)
     return ++ ++p;
 }
 
-inline std::vector<std::string> shell_split(char const * p)
+inline std::vector<std::string> shell_word_split(char const * p)
 {
     std::vector<std::string> words;
     char const * t = p;
