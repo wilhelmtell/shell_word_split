@@ -31,3 +31,10 @@ TEST_CASE("input/whitespace_mix", "")
     REQUIRE(words[0] == "two");
     REQUIRE(words[1] == "words");
 }
+
+TEST_CASE("input/leading_whitespace", "")
+{
+    auto const words = sws::shell_word_split("	two");
+    REQUIRE(words.size() == 1);
+    REQUIRE(words[0] == "two");
+}

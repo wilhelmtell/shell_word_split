@@ -19,7 +19,8 @@ inline std::vector<std::string> shell_word_split(char const * p)
         } else if( *p == '\\' && *(p + 1) ) {
             p = detail::parse_escape(p);
         } else if( std::isspace(*p) ) {
-            words.push_back(std::string(t, p));
+            if( t != p )
+                words.push_back(std::string(t, p));
             t = p = detail::parse_whitespace(p);
         } else {
             ++p;
