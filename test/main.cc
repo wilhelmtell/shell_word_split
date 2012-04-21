@@ -21,7 +21,7 @@ TEST_CASE("input/escaped_space_character", "")
 {
     auto const words = sws::shell_word_split("\\ ");
     REQUIRE(words.size() == 1);
-    REQUIRE(words[0] == "\\ ");
+    REQUIRE(words[0] == " ");
 }
 
 TEST_CASE("input/whitespace_mix", "")
@@ -37,4 +37,26 @@ TEST_CASE("input/leading_whitespace", "")
     auto const words = sws::shell_word_split("	two");
     REQUIRE(words.size() == 1);
     REQUIRE(words[0] == "two");
+}
+
+TEST_CASE("input/trailing_whitespace", "")
+{
+    auto const words = sws::shell_word_split("two  ");
+    REQUIRE(words.size() == 1);
+    REQUIRE(words[0] == "two");
+}
+
+TEST_CASE("input/leading_and_trailing_whitespace", "")
+{
+    auto const words = sws::shell_word_split("  	 two  ");
+    REQUIRE(words.size() == 1);
+    REQUIRE(words[0] == "two");
+}
+
+TEST_CASE("input/quoted_words", "")
+{
+    auto const words = sws::shell_word_split("word \"quoted words\"");
+    REQUIRE(words.size() == 2);
+    REQUIRE(words[0] == "word");
+    REQUIRE(words[1] == "quoted words");
 }

@@ -5,17 +5,17 @@ namespace sws { namespace detail {
 inline char const * parse_double_quoted_string(char const * p)
 {
     while( *p && *++p != '"' )
-        if( *p == '\\' && *(p + 1) == '"' ) ++ ++p;
-    return *p ? p : ++p;
+        if( *p == '\\' && *(p + 1) == '"' ) ++p;
+    return *p ? ++p : p;
 }
 
 inline char const * parse_single_quoted_string(char const * p)
 {
     while( *p && *++p != '\'' );
-    return *p ? p : ++p;
+    return *p ? ++p : p;
 }
 
-inline char const * parse_whitespace(char const * p)
+inline char const * skip_whitespace(char const * p)
 {
     while( std::isspace(*p) )
         ++p;
