@@ -5,7 +5,7 @@
 #include <vector>
 #include <cctype>
 
-namespace shell_word_split {
+namespace sws {
 inline char const * parse_double_quoted_string(char const * p)
 {
     while( *p && *++p != '"' )
@@ -53,6 +53,6 @@ inline std::vector<std::string> shell_split(char const * p)
         words.push_back(std::string(t, p));
     return words;
 }
-}  // namespace shell_word_split
+}  // namespace sws
 
 #endif  // SHELL_WORD_SPLIT_HH_
