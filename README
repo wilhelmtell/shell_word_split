@@ -1,0 +1,18 @@
+ shell_word_split
+
+Parse words from a string, emulating word-splitting as the shell does.
+
+ auto const words = sws::shell_word_split("echo hello world");
+ for( auto const w : words )
+     std::cout << '"' << w << "\" ";  // "echo" "hello" "world"
+ std::cout << words.size() << '\n';   // 3
+
+ auto const words = sws::shell_word_split("echo  	\  \ 5");
+ for( auto const w : words )
+     std::cout << '"' << w << "\" ";  // "echo" " " " 5"
+ std::cout << words.size() << '\n';   // 3
+
+ auto const words = sws::shell_word_split("\\"hello there\\"");
+ for( auto const w : words )
+     std::cout << '"' << w << "\" ";  // "hello there"
+ std::cout << words.size() << '\n';   // 1
