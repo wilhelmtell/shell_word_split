@@ -60,3 +60,11 @@ TEST_CASE("input/quoted_words", "")
     REQUIRE(words[0] == "word");
     REQUIRE(words[1] == "quoted words");
 }
+
+TEST_CASE("input/quoted_words_with_escape", "")
+{
+    auto const words = sws::shell_word_split("word \"quoted \\\"words\"");
+    REQUIRE(words.size() == 2);
+    REQUIRE(words[0] == "word");
+    REQUIRE(words[1] == "quoted \"words");
+}
