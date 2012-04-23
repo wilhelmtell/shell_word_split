@@ -12,7 +12,7 @@ inline char const * parse_escaping_double_quotes(char const * p, std::string& wo
 
 inline char const * parse_double_quoted_string(char const * p, std::string& word)
 {
-    while( *p && *++p != '"' )
+    while( *++p && *p != '"' )
         if( *p == '\\' )
             p = parse_escaping_double_quotes(p, word);
         else
@@ -22,7 +22,7 @@ inline char const * parse_double_quoted_string(char const * p, std::string& word
 
 inline char const * parse_single_quoted_string(char const * p, std::string& word)
 {
-    while( *p && *++p != '\'' )
+    while( *++p && *p != '\'' )
         word.push_back(*p);
     return p;
 }
