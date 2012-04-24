@@ -143,3 +143,13 @@ TEST_CASE("input/empty_string_with_whitespace", "")
     auto const words = sws::shell_word_split(" ");
     REQUIRE(words.size() == 0);
 }
+
+TEST_CASE("input/a_single_escape", "")
+{
+    auto const words = sws::shell_word_split("\\f");
+    REQUIRE(words.size() == 1);
+    REQUIRE(words[0] == "f");
+    REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
+        return iscntrl(c);
+    }) == -1);
+}
