@@ -90,7 +90,7 @@ TEST_CASE("input/leading_and_trailing_whitespace", "")
     }) == -1);
 }
 
-TEST_CASE("input/quoted_words", "")
+TEST_CASE("input/double_quoted_words", "")
 {
     auto const words = sws::shell_word_split("word \"quoted words\"");
     REQUIRE(words.size() == 2);
@@ -104,7 +104,7 @@ TEST_CASE("input/quoted_words", "")
     }) == -1);
 }
 
-TEST_CASE("input/quoted_words_with_escape", "")
+TEST_CASE("input/double_quoted_words_with_escape", "")
 {
     auto const words = sws::shell_word_split("word \"quoted \\\"words\"");
     REQUIRE(words.size() == 2);
@@ -116,4 +116,30 @@ TEST_CASE("input/quoted_words_with_escape", "")
     REQUIRE(test::find_if(words[1].begin(), words[1].end(), [](char c) {
         return iscntrl(c);
     }) == -1);
+}
+
+TEST_CASE("input/single_quoted_words_with_escape", "")
+{
+    auto const words = sws::shell_word_split("word 'quoted words'");
+    REQUIRE(words.size() == 2);
+    REQUIRE(words[0] == "word");
+    REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
+        return iscntrl(c);
+    }) == -1);
+    REQUIRE(words[1] == "quoted words");
+    REQUIRE(test::find_if(words[1].begin(), words[1].end(), [](char c) {
+        return iscntrl(c);
+    }) == -1);
+}
+
+TEST_CASE("input/empty_string", "")
+{
+    auto const words = sws::shell_word_split("");
+    REQUIRE(words.size() == 0);
+}
+
+TEST_CASE("input/empty_string_with_whitespace", "")
+{
+    auto const words = sws::shell_word_split(" ");
+    REQUIRE(words.size() == 0);
 }
