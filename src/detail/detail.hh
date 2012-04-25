@@ -37,7 +37,7 @@ inline char const * skip_whitespace(char const * p)
 inline char const * parse_bare_escape(char const * p, std::string& word)
 {
     word.push_back(*++p);
-    return p;
+    return ++p;
 }
 
 } }  // namespace sws::detail
