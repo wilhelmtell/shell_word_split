@@ -26,8 +26,11 @@ inline char const * parse_double_quoted_string(char const * p, std::string& word
 
 inline char const * parse_single_quoted_string(char const * p, std::string& word)
 {
-    while( *++p && *p != '\'' )
+    while( *++p != '\'' ) {
+        if( *p == 0 )
+            throw invalid_token("unexpected eos inside single-quoted string");
         word.push_back(*p);
+    }
     return ++p;
 }
 

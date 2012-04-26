@@ -155,6 +155,11 @@ TEST_CASE("input/a_single_escape", "")
     }) == -1);
 }
 
+TEST_CASE("input/a_single_single_quote", "")
+{
+    REQUIRE_THROWS_AS(sws::shell_word_split("'"), sws::invalid_token);
+}
+
 TEST_CASE("input/a_single_double_quote", "")
 {
     REQUIRE_THROWS_AS(sws::shell_word_split("\""), sws::invalid_token);
