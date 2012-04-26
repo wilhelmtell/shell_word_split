@@ -9,6 +9,8 @@ namespace sws { namespace detail {
 inline char const * parse_escaping_double_quotes(char const * p, std::string& word)
 {
     assert(p[0] == '\\');
+    if( p[1] == 0 )
+        throw invalid_token("unexpected eos in an escape inside double-quoted string");
     word.push_back(*++p);
     return p;
 }
@@ -48,6 +50,8 @@ inline char const * skip_whitespace(char const * p)
 inline char const * parse_bare_escape(char const * p, std::string& word)
 {
     assert(p[0] == '\\');
+    if( p[1] == 0 )
+        throw invalid_token("unexpected eos in an escape");
     word.push_back(*++p);
     return ++p;
 }

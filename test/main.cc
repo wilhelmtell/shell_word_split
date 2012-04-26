@@ -164,3 +164,13 @@ TEST_CASE("input/a_single_double_quote", "")
 {
     REQUIRE_THROWS_AS(sws::shell_word_split("\""), sws::invalid_token);
 }
+
+TEST_CASE("input/eos_in_double_quote_escape", "")
+{
+    REQUIRE_THROWS_AS(sws::shell_word_split("\"\\"), sws::invalid_token);
+}
+
+TEST_CASE("input/eos_in_escape", "")
+{
+    REQUIRE_THROWS_AS(sws::shell_word_split("\""), sws::invalid_token);
+}
