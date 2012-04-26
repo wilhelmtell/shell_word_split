@@ -5,6 +5,7 @@
 #include <vector>
 #include <cctype>
 #include "detail/detail.hh"
+#include "error.hh"
 
 namespace sws {
 inline std::vector<std::string> shell_word_split(char const * p)

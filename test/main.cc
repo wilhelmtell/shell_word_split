@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 #include <shell_word_split/shell_word_split.hh>
+#include <shell_word_split/error.hh>
 #include <algorithm>
 #include <cctype>
 #include <iterator>
@@ -152,4 +153,9 @@ TEST_CASE("input/a_single_escape", "")
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
         return iscntrl(c);
     }) == -1);
+}
+
+TEST_CASE("input/a_single_double_quote", "")
+{
+    REQUIRE_THROWS_AS(sws::shell_word_split("\""), sws::invalid_token);
 }

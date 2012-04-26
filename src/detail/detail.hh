@@ -2,6 +2,7 @@
 #define DETAIL_HH_
 
 #include <string>
+#include "../error.hh"
 
 namespace sws { namespace detail {
 inline char const * parse_escaping_double_quotes(char const * p, std::string& word)
@@ -12,11 +13,14 @@ inline char const * parse_escaping_double_quotes(char const * p, std::string& wo
 
 inline char const * parse_double_quoted_string(char const * p, std::string& word)
 {
-    while( *++p && *p != '"' )
+    while( *++p != '"' ) {
+        if( *p == 0 )
+            throw invalid_token("unexpected eos inside double-quoted string");
         if( *p == '\\' )
             p = parse_escaping_double_quotes(p, word);
         else
             word.push_back(*p);
+    }
     return ++p;
 }
 
