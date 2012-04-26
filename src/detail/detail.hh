@@ -40,8 +40,8 @@ inline char const * parse_single_quoted_string(char const * p, std::string& word
 
 inline char const * skip_whitespace(char const * p)
 {
-    while( std::isspace(*p) )
-        ++p;
+    assert(std::isspace(p[0]));
+    while( std::isspace(*++p) );
     return p;
 }
 
