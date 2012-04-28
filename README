@@ -2,17 +2,24 @@
 
 Parse words from a string, emulating word-splitting as the shell does.
 
- auto const words = sws::shell_word_split("echo hello world");
+ std::string in("echo hello world");
+ std::vector<std::string> words;
+ sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
  for( auto const w : words )
      std::cout << '"' << w << "\" ";  // "echo" "hello" "world"
  std::cout << words.size() << '\n';   // 3
 
- auto const words = sws::shell_word_split("echo  	\  \ 5");
+ in = "echo  	\  \ 5";  words.clear();
+ sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
  for( auto const w : words )
      std::cout << '"' << w << "\" ";  // "echo" " " " 5"
  std::cout << words.size() << '\n';   // 3
 
- auto const words = sws::shell_word_split("\\"hello there\\"");
+ in = "\\"hello there\\"";  words.clear();
+ sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
  for( auto const w : words )
      std::cout << '"' << w << "\" ";  // "hello there"
  std::cout << words.size() << '\n';   // 1
+
+This is useful for me as a tool for testing commandline input in other
+projects.
