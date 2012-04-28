@@ -46,7 +46,7 @@ TEST_CASE("input/two_words", "")
     REQUIRE(words[1] == "words");
 }
 
-TEST_CASE("input/escaped_space_character", "")
+TEST_CASE("input/bare_escaped_space_character", "")
 {
     std::string in("\\ ");
     std::vector<std::string> words;
@@ -171,7 +171,7 @@ TEST_CASE("input/empty_string_with_whitespace", "")
     REQUIRE(words.size() == 0);
 }
 
-TEST_CASE("input/a_single_escape", "")
+TEST_CASE("input/bare_escape", "")
 {
     std::string in("\\f");
     std::vector<std::string> words;
@@ -183,7 +183,7 @@ TEST_CASE("input/a_single_escape", "")
     }) == -1);
 }
 
-TEST_CASE("input/a_single_single_quote", "")
+TEST_CASE("input/single_quote", "")
 {
     std::string in("'");
     std::vector<std::string> words;
@@ -192,7 +192,7 @@ TEST_CASE("input/a_single_single_quote", "")
                       sws::invalid_token);
 }
 
-TEST_CASE("input/a_single_double_quote", "")
+TEST_CASE("input/double_quote", "")
 {
     std::string in("\"");
     std::vector<std::string> words;
@@ -217,4 +217,22 @@ TEST_CASE("input/eos_in_escape", "")
     REQUIRE_THROWS_AS(sws::shell_word_split(in.begin(), in.end(),
                                             std::back_inserter(words)),
                       sws::invalid_token);
+}
+
+TEST_CASE("input/bare_escaped_double_quote", "")
+{
+    std::string in("\\\"");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
+    REQUIRE(words.size() == 1);
+    REQUIRE(words[0] == "\"");
+}
+
+TEST_CASE("input/bare_escaped_single_quote", "")
+{
+    std::string in("\\'");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
+    REQUIRE(words.size() == 1);
+    REQUIRE(words[0] == "'");
 }
