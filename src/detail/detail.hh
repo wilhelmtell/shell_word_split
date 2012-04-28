@@ -4,56 +4,64 @@
 #include <string>
 #include "../error.hh"
 #include <cassert>
+#include <iterator>
 
 namespace sws { namespace detail {
-inline char const * parse_escaping_double_quotes(char const * p, std::string& word)
+template<typename In>
+In parse_escaping_double_quotes(In first, In last, std::string& word)
 {
-    assert(p[0] == '\\');
-    if( p[1] == 0 )
+    assert(first != last && *first == '\\');
+    if( std::next(first) == last )
         throw invalid_token("unexpected eos in an escape inside double-quoted string");
-    word.push_back(*++p);
-    return p;
+    word.push_back(*++first);
+    return ++first;
 }
 
-inline char const * parse_double_quoted_string(char const * p, std::string& word)
+template<typename In>
+In parse_double_quoted_string(In first, In last, std::string& word)
 {
-    assert(p[0] == '"');
-    while( *++p != '"' ) {
-        if( *p == 0 )
-            throw invalid_token("unexpected eos inside double-quoted string");
-        if( *p == '\\' )
-            p = parse_escaping_double_quotes(p, word);
+    assert(first != last && *first == '"');
+    ++first;
+    while( first != last && *first != '"' ) {
+        if( *first == '\\' )
+            first = parse_escaping_double_quotes(first, last, word);
         else
-            word.push_back(*p);
+            word.push_back(*first++);
     }
-    return ++p;
+    if( first == last )
+        throw invalid_token("unexpected eos inside double-quoted string");
+    return ++first;
 }
 
-inline char const * parse_single_quoted_string(char const * p, std::string& word)
+template<typename In>
+In parse_single_quoted_string(In first, In last, std::string& word)
 {
-    assert(p[0] == '\'');
-    while( *++p != '\'' ) {
-        if( *p == 0 )
-            throw invalid_token("unexpected eos inside single-quoted string");
-        word.push_back(*p);
-    }
-    return ++p;
+    assert(first != last && *first == '\'');
+    ++first;
+    while( first != last && *first != '\'' )
+        word.push_back(*first++);
+    if( first == last )
+        throw invalid_token("unexpected eos inside single-quoted string");
+    return ++first;
 }
 
-inline char const * skip_whitespace(char const * p)
+template<typename In>
+In skip_whitespace(In first, In last)
 {
-    assert(std::isspace(p[0]));
-    while( std::isspace(*++p) );
-    return p;
+    assert(first != last && std::isspace(*first));
+    while( first != last && std::isspace(*first) )
+        ++first;
+    return first;
 }
 
-inline char const * parse_bare_escape(char const * p, std::string& word)
+template<typename In>
+In parse_bare_escape(In first, In last, std::string& word)
 {
-    assert(p[0] == '\\');
-    if( p[1] == 0 )
+    assert(first != last && *first == '\\');
+    if( std::next(first) == last )
         throw invalid_token("unexpected eos in an escape");
-    word.push_back(*++p);
-    return ++p;
+    word.push_back(*++first);
+    return ++first;
 }
 
 } }  // namespace sws::detail

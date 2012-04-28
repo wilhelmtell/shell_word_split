@@ -2,41 +2,40 @@
 #define SHELL_WORD_SPLIT_HH_
 
 #include <string>
-#include <vector>
 #include <cctype>
 #include "detail/detail.hh"
 #include "error.hh"
 
 namespace sws {
-inline std::vector<std::string> shell_word_split(char const * p)
+template<typename In, typename Out>
+Out shell_word_split(In first, In last, Out out)
 {
-    std::vector<std::string> words;
     std::string word;
     bool in_word = false;
-    while( *p ) {
-        if( *p == '\'' ) {
-            p = detail::parse_single_quoted_string(p, word);
+    while( first != last ) {
+        if( *first == '\'' ) {
+            first = detail::parse_single_quoted_string(first, last, word);
             in_word = true;
-        } else if( *p == '"' ) {
-            p = detail::parse_double_quoted_string(p, word);
+        } else if( *first == '"' ) {
+            first = detail::parse_double_quoted_string(first, last, word);
             in_word = true;
-        } else if( *p == '\\' ) {
-            p = detail::parse_bare_escape(p, word);
+        } else if( *first == '\\' ) {
+            first = detail::parse_bare_escape(first, last, word);
             in_word = true;
-        } else if( std::isspace(*p) ) {
+        } else if( std::isspace(*first) ) {
             if( in_word )
-                words.push_back(word);
+                *out++ = word;
             word.clear();
             in_word = false;
-            p = detail::skip_whitespace(p);
+            first = detail::skip_whitespace(first, last);
         } else {
-            word.push_back(*p++);
+            word.push_back(*first++);
             in_word = true;
         }
     }
     if( in_word )
-        words.push_back(word);
-    return words;
+        *out++ = word;
+    return out;
 }
 }  // namespace sws
 

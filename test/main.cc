@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <cctype>
 #include <iterator>
+#include <string>
+#include <vector>
 
 
 namespace test {
@@ -27,14 +29,18 @@ find_if(In first, In last, Pred pred)
 
 TEST_CASE("input/one_word", "")
 {
-    auto const words = sws::shell_word_split("word");
+    std::string in("word");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 1);
     REQUIRE(words[0] == "word");
 }
 
 TEST_CASE("input/two_words", "")
 {
-    auto const words = sws::shell_word_split("two words");
+    std::string in("two words");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 2);
     REQUIRE(words[0] == "two");
     REQUIRE(words[1] == "words");
@@ -42,14 +48,18 @@ TEST_CASE("input/two_words", "")
 
 TEST_CASE("input/escaped_space_character", "")
 {
-    auto const words = sws::shell_word_split("\\ ");
+    std::string in("\\ ");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 1);
     REQUIRE(words[0] == " ");
 }
 
 TEST_CASE("input/whitespace_mix", "")
 {
-    auto const words = sws::shell_word_split("two 	 words");
+    std::string in("two 	 words");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 2);
     REQUIRE(words[0] == "two");
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
@@ -63,7 +73,9 @@ TEST_CASE("input/whitespace_mix", "")
 
 TEST_CASE("input/leading_whitespace", "")
 {
-    auto const words = sws::shell_word_split("	two");
+    std::string in("	two");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 1);
     REQUIRE(words[0] == "two");
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
@@ -73,7 +85,9 @@ TEST_CASE("input/leading_whitespace", "")
 
 TEST_CASE("input/trailing_whitespace", "")
 {
-    auto const words = sws::shell_word_split("two  ");
+    std::string in("two  ");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 1);
     REQUIRE(words[0] == "two");
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
@@ -83,7 +97,9 @@ TEST_CASE("input/trailing_whitespace", "")
 
 TEST_CASE("input/leading_and_trailing_whitespace", "")
 {
-    auto const words = sws::shell_word_split("  	 two  ");
+    std::string in("  	 two  ");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 1);
     REQUIRE(words[0] == "two");
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
@@ -93,7 +109,9 @@ TEST_CASE("input/leading_and_trailing_whitespace", "")
 
 TEST_CASE("input/double_quoted_words", "")
 {
-    auto const words = sws::shell_word_split("word \"quoted words\"");
+    std::string in("word \"quoted words\"");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 2);
     REQUIRE(words[0] == "word");
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
@@ -107,7 +125,9 @@ TEST_CASE("input/double_quoted_words", "")
 
 TEST_CASE("input/double_quoted_words_with_escape", "")
 {
-    auto const words = sws::shell_word_split("word \"quoted \\\"words\"");
+    std::string in("word \"quoted \\\"words\"");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 2);
     REQUIRE(words[0] == "word");
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
@@ -121,7 +141,9 @@ TEST_CASE("input/double_quoted_words_with_escape", "")
 
 TEST_CASE("input/single_quoted_words_with_escape", "")
 {
-    auto const words = sws::shell_word_split("word 'quoted words'");
+    std::string in("word 'quoted words'");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 2);
     REQUIRE(words[0] == "word");
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
@@ -135,19 +157,25 @@ TEST_CASE("input/single_quoted_words_with_escape", "")
 
 TEST_CASE("input/empty_string", "")
 {
-    auto const words = sws::shell_word_split("");
+    std::string in("");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 0);
 }
 
 TEST_CASE("input/empty_string_with_whitespace", "")
 {
-    auto const words = sws::shell_word_split(" ");
+    std::string in(" ");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 0);
 }
 
 TEST_CASE("input/a_single_escape", "")
 {
-    auto const words = sws::shell_word_split("\\f");
+    std::string in("\\f");
+    std::vector<std::string> words;
+    sws::shell_word_split(in.begin(), in.end(), std::back_inserter(words));
     REQUIRE(words.size() == 1);
     REQUIRE(words[0] == "f");
     REQUIRE(test::find_if(words[0].begin(), words[0].end(), [](char c) {
@@ -157,20 +185,36 @@ TEST_CASE("input/a_single_escape", "")
 
 TEST_CASE("input/a_single_single_quote", "")
 {
-    REQUIRE_THROWS_AS(sws::shell_word_split("'"), sws::invalid_token);
+    std::string in("'");
+    std::vector<std::string> words;
+    REQUIRE_THROWS_AS(sws::shell_word_split(in.begin(), in.end(),
+                                            std::back_inserter(words)),
+                      sws::invalid_token);
 }
 
 TEST_CASE("input/a_single_double_quote", "")
 {
-    REQUIRE_THROWS_AS(sws::shell_word_split("\""), sws::invalid_token);
+    std::string in("\"");
+    std::vector<std::string> words;
+    REQUIRE_THROWS_AS(sws::shell_word_split(in.begin(), in.end(),
+                                            std::back_inserter(words)),
+                      sws::invalid_token);
 }
 
 TEST_CASE("input/eos_in_double_quote_escape", "")
 {
-    REQUIRE_THROWS_AS(sws::shell_word_split("\"\\"), sws::invalid_token);
+    std::string in("\"\\");
+    std::vector<std::string> words;
+    REQUIRE_THROWS_AS(sws::shell_word_split(in.begin(), in.end(),
+                                            std::back_inserter(words)),
+                      sws::invalid_token);
 }
 
 TEST_CASE("input/eos_in_escape", "")
 {
-    REQUIRE_THROWS_AS(sws::shell_word_split("\""), sws::invalid_token);
+    std::string in("\"");
+    std::vector<std::string> words;
+    REQUIRE_THROWS_AS(sws::shell_word_split(in.begin(), in.end(),
+                                            std::back_inserter(words)),
+                      sws::invalid_token);
 }
