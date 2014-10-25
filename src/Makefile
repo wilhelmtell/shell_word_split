@@ -19,7 +19,7 @@ endif
 endif
 
 install: all
-	install --mode=644 --target-directory $(PREFIX)/include/shell_word_split $(HEADERS)
+	install --mode=644 -D --target-directory $(PREFIX)/include/shell_word_split $(HEADERS)
 
 uninstall:
 	rm -f $(foreach HEADER,$(patsubst $(ROOTDIR)/include/shell_word_split/%,$(PREFIX)/include/shell_word_split/%, $(HEADERS)),$(HEADER))
