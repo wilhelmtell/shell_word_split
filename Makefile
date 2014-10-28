@@ -26,6 +26,7 @@ install:
 
 uninstall:
 	${MAKE} --directory $(CURDIR)/src uninstall
+	rmdir -p $(PREFIX)/include/shell_word_split 2>/dev/null || true
 
 help:
 	@echo " AVAILABLE TARGETS:"

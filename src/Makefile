@@ -24,5 +24,6 @@ install: all
 	install --mode=644 -D --target-directory $(PREFIX)/include/shell_word_split $(HEADERS)
 
 uninstall:
-	rm -f $(foreach HEADER,$(patsubst $(ROOTDIR)/include/shell_word_split/%,$(PREFIX)/include/shell_word_split/%, $(HEADERS)),$(HEADER))
+	rm -f $(foreach H,$(foreach H,$(HEADERS),$(notdir $(H))),$(PREFIX)/include/shell_word_split/$(H))
 	${MAKE} --directory $(CURDIR)/detail uninstall
+	rmdir -p $(PREFIX)/include/shell_word_split/detail 2>/dev/null || true
